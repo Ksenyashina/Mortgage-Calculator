@@ -6,8 +6,13 @@ from kivymd.app import MDApp
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.snackbar import Snackbar
 from kivymd.icon_definitions import md_icons
+from kivymd.font_definitions import fonts
 
 KV = '''
+#https://stackoverflow.com/questions/65698145/kivymd-tab-name-containing-icons-and-text
+# this import will prevent disappear tabs through some clicks on them)))
+#:import md_icons kivymd.icon_definitions.md_icons
+
 MDBoxLayout:
     orientation: "vertical"
 
@@ -15,35 +20,93 @@ MDBoxLayout:
         title: "MortgageCalculator"
     MDTabs:
         id: tabs
-
-    MDLabel:
-        text: "Content"
-        halign: "center"
-    Widget:
-        MDTextField:
-            hint_text:"No helper text"
-
+        on_tab_switch: app.on_tab_switch(*args)
+        height: "48dp"
+        tab_indicator_anim: False
+        Tab:
+            id: tab1
+            name: 'tab1'
+            icon: "calculator-variant"
+            title: "Ввод"
+            
+            BoxLayout:
+                orientation: 'vertical'
+                padding: "10dp"
+    
+                BoxLayout:
+                    orientation: 'horizontal'
+                    icon:"calendar-month"
+                    title:"Start date"
+    
+                    MDIconButton:
+                        icon: "calendar-month"
+    
+                    MDTextField:
+                        hint_text:"Start date"
+    
+                BoxLayout:
+                    orientation: 'horizontal'
+    
+                    MDIconButton:
+                        icon: "cash"
+    
+                    MDTextField:
+                        hint_text: "Loan"
+                
+                BoxLayout:
+                    orientation: 'horizontal'
+    
+                    MDIconButton:
+                        icon: "clock-time-five-outline"
+    
+                    MDTextField:
+                        hint_text: "Months"
+    
+    
+                BoxLayout:
+                    orientation: 'horizontal'
+    
+                    MDIconButton:
+                        icon: "bank"
+    
+                    MDTextField:
+                        hint_text: "Interest, %"
+    
+                    MDTextField:
+                        hint_text: "Payment type"
+        Tab:
+            id: tab2
+            name: 'tab2'
+            icon: "table-large"
+            title: "Расчет"
+        Tab:
+            id: tab3
+            name: 'tab3'
+            icon: "chart-areaspline"
+            title: "График"
+        Tab:
+            id: tab4
+            name: 'tab4'
+            icon: "chart-pie"
+            title: "Диаграмма"
+        Tab:
+            id: tab5
+            name: 'tab5'
+            icon: "book-open-variant"
+            title: "Итого"
+            
 '''
 
 class Tab(MDFloatLayout, MDTabsBase):
     pass
-class Test(MDApp):
+class MortgageCalculatorApp(MDApp):
     def build(self):
         self.theme_cls.primary_palette = "Purple"
         self.theme_cls.theme_style = "Light"
         return Builder.load_string(KV)
-    def on_start(self):
-        icons_item = {
-                "Ввод": "Ввод",
-                "Расчет": "Расчет",
-                "График": "График",
-                "Диаграмма": "Диаграмма",
-                "Итого": "Итого"
-            }
-        # for name_tab in list(md_icons.keys())[15:30]:
-        #     self.root.ids.tabs.add_widget(Tab(icon=name_tab, title=name_tab))
-        for icon_name, name_tab in icons_item.items():
-            self.root.ids.tabs.add_widget(Tab(title=name_tab))
+
+    def on_tab_switch(self,instance_tabs,instance_tab,instance_tab_label,tab_text):
+        print("Tab clicked!"+tab_text)
 
 
-Test().run()
+MortgageCalculatorApp().run()
